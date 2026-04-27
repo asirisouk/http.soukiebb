@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 <title>soukiebb — content dashboard</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23faf7f2'/><text y='.9em' font-size='72' font-family='Georgia,serif' fill='%238a9445' x='50%25' text-anchor='middle' dominant-baseline='hanging' dy='10'>@</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 680'><rect x='100' y='100' width='480' height='480' rx='96' fill='%23faf7f2'/><path d='M462 168 C462 168 472 198 490 216 C508 234 538 244 538 244 C538 244 508 254 490 272 C472 290 462 320 462 320 C462 320 452 290 434 272 C416 254 386 244 386 244 C386 244 416 234 434 216 C452 198 462 168 462 168 Z' fill='%238a9445'/><text x='295' y='492' font-family='Georgia,serif' font-size='290' font-style='italic' font-weight='400' fill='%238a9445' text-anchor='middle'>@</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -545,7 +545,9 @@ function renderGrid(){
       IMP_DATES.filter(id=>id.year===md.year&&id.month===md.month&&id.day===d).forEach(id=>{
         const c=document.createElement('div');c.className='imp-cal-evt';
         c.style.background=id.color+'20';c.style.color=id.color;
+        c.style.cursor='pointer';
         c.innerHTML=`<span class="imp-cal-dot" style="background:${id.color}"></span>${id.label}`;
+        c.onclick=e=>{e.stopPropagation();openImpDateEdit(id);};
         cell.appendChild(c);
       });
       POSTS.filter(p=>p.year===md.year&&p.month===md.month&&p.day===d&&activeFilters.has(p.pillar)).forEach(post=>{
@@ -595,12 +597,13 @@ function renderImpDates(){
   const sorted=[...IMP_DATES].sort((a,b)=>new Date(a.year,a.month,a.day)-new Date(b.year,b.month,b.day));
   if(!sorted.length){el.innerHTML='<div class="imp-empty">no important dates yet</div>';return;}
   sorted.forEach(id=>{
-    const item=document.createElement('div');item.className='imp-date-item';
+    const item=document.createElement('div');item.className='imp-date-item';item.style.cursor='pointer';
     const dot=document.createElement('div');dot.className='imp-dot';dot.style.background=id.color;
     const info=document.createElement('div');info.className='imp-date-info';
     info.innerHTML=`<div class="imp-date-label">${id.label}</div><div class="imp-date-when">${MONTH_NAMES[id.month]} ${id.day}, ${id.year}</div>`;
     const del=document.createElement('button');del.className='imp-date-del';del.textContent='✕';
-    del.onclick=()=>{const i=IMP_DATES.indexOf(id);if(i>-1){IMP_DATES.splice(i,1);renderImpDates();renderGrid();}};
+    del.onclick=e=>{e.stopPropagation();const i=IMP_DATES.indexOf(id);if(i>-1){IMP_DATES.splice(i,1);renderImpDates();renderGrid();}};
+    item.onclick=()=>openImpDateEdit(id);
     item.appendChild(dot);item.appendChild(info);item.appendChild(del);el.appendChild(item);
   });
 }
@@ -683,11 +686,14 @@ function openModal(type){
     renderDP();buildPillarPicker();
     document.getElementById('modal-post').classList.add('open');updateSaveBtn();
   }else{
+    editingImpDate=null;
     impSelDate=null;impSelColor=IMP_COLORS[0];
     document.getElementById('imp-label').value='';
     document.getElementById('imp-date-text').textContent='select a date';
     document.getElementById('imp-date-display').classList.remove('open');
     document.getElementById('imp-dp').classList.remove('open');
+    document.getElementById('modal-impdate').querySelector('.modal-title').textContent='important date';
+    document.getElementById('imp-btn-save').textContent='save date';
     const now=new Date();impDpY=now.getFullYear();impDpM=now.getMonth();
     renderImpDP();buildColorPicker();
     document.getElementById('modal-impdate').classList.add('open');updateImpSaveBtn();
@@ -754,11 +760,35 @@ function savePost(){
   POSTS.push({year:selDate.year,month:selDate.month,day:selDate.day,pillar:selPillar,platform:selPlatform,idea});
   closeModal('post');renderGrid();showToast('post added to your calendar');
 }
+let editingImpDate=null;
+
+function openImpDateEdit(id){
+  editingImpDate=id;
+  impSelDate={year:id.year,month:id.month,day:id.day};
+  impSelColor=id.color;
+  impDpY=id.year;impDpM=id.month;
+  document.getElementById('imp-label').value=id.label;
+  document.getElementById('imp-date-text').textContent=`${MONTH_NAMES[id.month]} ${id.day}, ${id.year}`;
+  document.getElementById('imp-date-display').classList.remove('open');
+  document.getElementById('imp-dp').classList.remove('open');
+  document.getElementById('modal-impdate').querySelector('.modal-title').textContent='edit date';
+  document.getElementById('imp-btn-save').textContent='save changes';
+  renderImpDP();buildColorPicker();
+  document.getElementById('modal-impdate').classList.add('open');updateImpSaveBtn();
+}
+
 function saveImpDate(){
   const lbl=document.getElementById('imp-label').value.trim();
   if(!impSelDate||!lbl)return;
-  IMP_DATES.push({label:lbl,year:impSelDate.year,month:impSelDate.month,day:impSelDate.day,color:impSelColor});
-  closeModal('impdate');renderImpDates();renderGrid();showToast('important date saved');
+  if(editingImpDate){
+    const i=IMP_DATES.indexOf(editingImpDate);
+    if(i>-1){IMP_DATES[i]={label:lbl,year:impSelDate.year,month:impSelDate.month,day:impSelDate.day,color:impSelColor};}
+    editingImpDate=null;
+    closeModal('impdate');renderImpDates();renderGrid();showToast('date updated');
+  } else {
+    IMP_DATES.push({label:lbl,year:impSelDate.year,month:impSelDate.month,day:impSelDate.day,color:impSelColor});
+    closeModal('impdate');renderImpDates();renderGrid();showToast('important date saved');
+  }
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
