@@ -5,428 +5,370 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 <title>soukiebb — content dashboard</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23faf7f2'/><text y='.9em' font-size='72' font-family='Georgia,serif' fill='%238a9445' x='50%25' text-anchor='middle' dominant-baseline='hanging' dy='10'>@</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --matcha:#8a9445;--matcha-pale:#f2f5e8;--matcha-mid:#adb96a;
+  --cloudy:#dbe0e6;--cloudy-dark:#2a3040;
+  --linen:#e5d1d1;--linen-dark:#4a2828;
+  --teal:#2a5654;--teal-pale:#e8f4f3;
+  --gingham:#c8b2ce;--gingham-dark:#3d1f50;
+  --wine:#771c31;--wine-pale:#fdf0f2;
+  --cream:#faf7f2;--white:#fff;
+  --ink:#1e1c1a;--stone:#8a857e;--stone-light:#c2bdb6;
+  --border:#e8e2da;--border-light:#f0ece6;
+  --nav-h:64px;
+}
+html{scroll-behavior:smooth;font-size:112%}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
 
-:root {
-  --matcha: #8a9445;
-  --matcha-pale: #f2f5e8;
-  --matcha-mid: #adb96a;
-  --cloudy: #dbe0e6;
-  --cloudy-dark: #2a3040;
-  --linen: #e5d1d1;
-  --linen-dark: #4a2828;
-  --teal: #2a5654;
-  --teal-pale: #e8f4f3;
-  --gingham: #c8b2ce;
-  --gingham-dark: #3d1f50;
-  --wine: #771c31;
-  --wine-pale: #fdf0f2;
-  --cream: #faf7f2;
-  --white: #ffffff;
-  --ink: #1e1c1a;
-  --stone: #8a857e;
-  --stone-light: #c2bdb6;
-  --border: #e8e2da;
-  --border-light: #f0ece6;
-  --nav-h: 64px;
-}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(250,247,242,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;z-index:100}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink)}
+.nav-brand em{font-style:italic;color:var(--matcha)}
+.nav-links{display:flex;gap:4px}
+.nav-link{font-size:13px;padding:7px 16px;border-radius:20px;border:none;background:transparent;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .18s}
+.nav-link:hover{background:var(--border-light);color:var(--ink)}
+.nav-link.active{background:var(--matcha);color:white}
+.nav-add-btn{font-size:13px;font-weight:500;padding:8px 20px;border-radius:20px;border:1.5px solid var(--matcha);background:transparent;color:var(--matcha);cursor:pointer;font-family:'Jost',sans-serif;transition:all .18s}
+.nav-add-btn:hover{background:var(--matcha);color:white}
 
-html { scroll-behavior: smooth; font-size: 112%; }
+/* PAGES */
+.page{display:none;padding:calc(var(--nav-h) + 1.25rem) 1.25rem 3rem}
+.page.active{display:block}
 
-body {
-  font-family: 'Jost', sans-serif;
-  background: var(--cream);
-  color: var(--ink);
-  min-height: 100vh;
-}
+/* 3-COL LAYOUT */
+.cal-layout{display:grid;grid-template-columns:210px 1fr 255px;gap:1rem;align-items:start}
 
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  background: rgba(250, 247, 242, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2.5rem;
-  z-index: 100;
-}
-.nav-brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 400;
-  color: var(--ink);
-  letter-spacing: -0.01em;
-}
-.nav-brand em { font-style: italic; color: var(--matcha); }
-.nav-links { display: flex; gap: 4px; }
-.nav-link {
-  font-size: 13px;
-  font-weight: 400;
-  padding: 7px 16px;
-  border-radius: 20px;
-  border: none;
-  background: transparent;
-  color: var(--stone);
-  cursor: pointer;
-  font-family: 'Jost', sans-serif;
-  transition: all .18s;
-  letter-spacing: .01em;
-}
-.nav-link:hover { background: var(--border-light); color: var(--ink); }
-.nav-link.active { background: var(--matcha); color: white; }
-.nav-add-btn {
-  font-size: 13px;
-  font-weight: 500;
-  padding: 8px 20px;
-  border-radius: 20px;
-  border: 1.5px solid var(--matcha);
-  background: transparent;
-  color: var(--matcha);
-  cursor: pointer;
-  font-family: 'Jost', sans-serif;
-  transition: all .18s;
-  letter-spacing: .01em;
-}
-.nav-add-btn:hover { background: var(--matcha); color: white; }
+/* LEFT PANEL */
+.left-panel{display:flex;flex-direction:column;gap:1rem;position:sticky;top:calc(var(--nav-h) + 1.25rem)}
+.panel-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.panel-card-header{padding:11px 13px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-light)}
+.panel-card-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;color:var(--ink)}
+.panel-card-action{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .14s}
+.panel-card-action:hover{border-color:var(--matcha);color:var(--matcha)}
 
-/* ── PAGES ── */
-.page { display: none; padding: calc(var(--nav-h) + 2rem) 2.5rem 3rem; max-width: 1140px; margin: 0 auto; }
-.page.active { display: block; }
+/* mini cal */
+.mini-nav{display:flex;gap:3px}
+.mini-nav-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:white;color:var(--stone);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s}
+.mini-nav-btn:hover{border-color:var(--matcha);color:var(--matcha)}
+.mini-cal-body{padding:8px 10px 10px}
+.mini-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:3px}
+.mini-dow-cell{font-size:9px;color:var(--stone);text-align:center;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.mini-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:10px;border-radius:4px;cursor:pointer;color:var(--ink);transition:background .1s;position:relative;border:none;background:none;font-family:'Jost',sans-serif}
+.mini-day:hover{background:var(--matcha-pale)}
+.mini-day.out{color:var(--stone-light);cursor:default}
+.mini-day.out:hover{background:none}
+.mini-day.has-post::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--matcha)}
+.mini-day.today{background:var(--matcha);color:white;font-weight:500}
+.mini-day.today:hover{background:var(--matcha)}
+.mini-day.today.has-post::after{background:white}
 
-/* ── PAGE HEADERS ── */
-.page-header { margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: space-between; }
-.page-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--ink); line-height: 1; }
-.page-title em { font-style: italic; color: var(--matcha); }
-.page-sub { font-size: 12px; color: var(--stone); letter-spacing: .05em; text-transform: uppercase; margin-top: 6px; }
+/* important dates */
+.imp-dates-list{padding:6px 0;max-height:220px;overflow-y:auto}
+.imp-date-item{padding:6px 13px;display:flex;align-items:flex-start;gap:7px;transition:background .1s}
+.imp-date-item:hover{background:var(--cream)}
+.imp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.imp-date-info{flex:1;min-width:0}
+.imp-date-label{font-size:12px;color:var(--ink);line-height:1.3}
+.imp-date-when{font-size:10px;color:var(--stone);margin-top:1px}
+.imp-date-del{font-size:10px;background:none;border:none;color:var(--stone-light);cursor:pointer;opacity:0;transition:opacity .12s;padding:0;flex-shrink:0}
+.imp-date-item:hover .imp-date-del{opacity:1}
+.imp-empty{padding:14px 13px;font-size:11px;color:var(--stone);font-style:italic;text-align:center}
 
-/* ── LEGEND ── */
-.legend { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.lpill {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; padding: 5px 14px;
-  border-radius: 20px; cursor: pointer;
-  border: 1px solid transparent;
-  transition: opacity .2s;
-  font-family: 'Jost', sans-serif;
-  font-weight: 400;
-}
-.lpill.dim { opacity: .28; }
-.ldot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+/* CENTER */
+.center-panel{min-width:0}
+.cal-top{margin-bottom:.9rem;display:flex;align-items:flex-end;justify-content:space-between}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink);line-height:1}
+.page-title em{font-style:italic;color:var(--matcha)}
+.page-sub{font-size:10px;color:var(--stone);letter-spacing:.05em;text-transform:uppercase;margin-top:5px}
+.cal-nav{display:flex;align-items:center;gap:8px}
+.nav-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:white;color:var(--stone);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.nav-btn:hover{border-color:var(--matcha);color:var(--matcha)}
+.month-display{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;min-width:120px;text-align:center;color:var(--ink)}
 
-/* ── CALENDAR ── */
-.cal-nav { display: flex; align-items: center; gap: 12px; }
-.nav-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid var(--border); background: white;
-  color: var(--stone); font-size: 15px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .15s; font-family: 'Jost', sans-serif;
-}
-.nav-btn:hover { border-color: var(--matcha); color: var(--matcha); }
-.month-display { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; min-width: 150px; text-align: center; color: var(--ink); }
+.legend{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.8rem}
+.lpill{display:flex;align-items:center;gap:5px;font-size:10px;padding:3px 10px;border-radius:20px;cursor:pointer;border:1px solid transparent;transition:opacity .2s;font-family:'Jost',sans-serif}
+.lpill.dim{opacity:.25}
+.ldot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
-.cal-wrap { background: white; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,.04); }
-.dow-row { display: grid; grid-template-columns: repeat(7,1fr); background: #f7f4ef; border-bottom: 1px solid var(--border); }
-.dow { padding: 13px 8px; font-size: 11px; font-weight: 500; color: var(--stone); text-align: center; text-transform: uppercase; letter-spacing: .06em; }
-.month-grid { display: grid; grid-template-columns: repeat(7,1fr); }
-.day-cell {
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  min-height: 148px;
-  padding: 10px 10px 8px;
-  display: flex; flex-direction: column; gap: 5px;
-  background: white;
-  cursor: pointer;
-  transition: background .1s;
-}
-.day-cell:hover { background: #fdfcf9; }
-.day-cell:nth-child(7n) { border-right: none; }
-.day-cell.out-of-month { background: #faf8f5; opacity: .45; cursor: default; }
-.day-cell.out-of-month:hover { background: #faf8f5; }
-.day-num-wrap { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px; flex-shrink: 0; }
-.day-num { font-size: 13px; color: var(--stone); font-weight: 400; line-height: 1; }
-.day-cell.today .day-num-wrap { background: var(--matcha); border-radius: 50%; }
-.day-cell.today .day-num { color: white; font-weight: 500; }
-.evt { border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
-.evt-platform { font-size: 11px; font-weight: 500; letter-spacing: .02em; opacity: .75; }
-.evt-idea { font-size: 12px; line-height: 1.4; opacity: .95; }
-.evt-delete {
-  display: none; margin-left: auto; font-size: 11px;
-  background: none; border: none; cursor: pointer;
-  opacity: .5; padding: 0 0 0 4px; line-height: 1; color: inherit;
-}
-.evt:hover .evt-delete { display: block; }
+.cal-wrap{background:white;border-radius:13px;border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.04)}
+.dow-row{display:grid;grid-template-columns:repeat(7,1fr);background:#f7f4ef;border-bottom:1px solid var(--border)}
+.dow{padding:10px 4px;font-size:10px;font-weight:500;color:var(--stone);text-align:center;text-transform:uppercase;letter-spacing:.06em}
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.day-cell{border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-height:115px;padding:7px 7px 6px;display:flex;flex-direction:column;gap:3px;background:white;cursor:pointer;transition:background .1s}
+.day-cell:hover{background:#fdfcf9}
+.day-cell:nth-child(7n){border-right:none}
+.day-cell.out-of-month{background:#faf8f5;opacity:.4;cursor:default}
+.day-cell.out-of-month:hover{background:#faf8f5}
+.day-num-wrap{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.day-num{font-size:11px;color:var(--stone);font-weight:400}
+.day-cell.today .day-num-wrap{background:var(--matcha);border-radius:50%}
+.day-cell.today .day-num{color:white;font-weight:500}
+.evt{border-radius:4px;padding:3px 6px;display:flex;flex-direction:column;gap:1px;flex-shrink:0}
+.evt-platform{font-size:9px;font-weight:500;opacity:.75}
+.evt-idea{font-size:10px;line-height:1.3;opacity:.95}
+.evt-delete{display:none;margin-left:auto;font-size:9px;background:none;border:none;cursor:pointer;opacity:.5;padding:0 0 0 3px;color:inherit}
+.evt:hover .evt-delete{display:block}
+.imp-cal-evt{border-radius:4px;padding:2px 6px;font-size:9px;font-weight:500;display:flex;align-items:center;gap:3px;flex-shrink:0}
+.imp-cal-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.cal-footer{margin-top:.65rem;font-size:11px;color:var(--stone);display:flex;justify-content:space-between}
+.cal-footer span{color:var(--matcha);font-weight:500}
 
-.cal-footer { margin-top: 1rem; font-size: 12px; color: var(--stone); display: flex; justify-content: space-between; }
-.cal-footer span { color: var(--matcha); font-weight: 500; }
+/* RIGHT SIDEBAR */
+.right-panel{position:sticky;top:calc(var(--nav-h) + 1.25rem)}
+.upcoming-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.upcoming-header{padding:13px 15px 10px;border-bottom:1px solid var(--border-light)}
+.upcoming-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ink)}
+.upcoming-sub{font-size:10px;color:var(--stone);margin-top:1px}
 
-/* ── HASHTAGS ── */
-.brand-block {
-  background: white; border: 1px solid var(--border);
-  border-radius: 14px; padding: 1.4rem 1.75rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,.03);
-}
-.brand-block-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-.block-title { font-size: 14px; font-weight: 500; color: var(--ink); }
-.block-sub { font-size: 12px; color: var(--stone); margin-bottom: 12px; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-family: 'Jost', sans-serif; }
+.upcoming-filters{padding:8px 12px 8px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border-light)}
+.uf-btn{font-size:10px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .14s}
+.uf-btn:hover{border-color:#bbb}
+.uf-btn.active{background:var(--ink);color:white;border-color:var(--ink)}
 
-.copy-btn {
-  font-size: 12px; padding: 7px 18px; border-radius: 20px;
-  border: 1px solid var(--border); background: white;
-  color: var(--stone); cursor: pointer;
-  font-family: 'Jost', sans-serif; transition: all .15s; white-space: nowrap;
-}
-.copy-btn:hover { border-color: var(--matcha); color: var(--matcha); }
-.copy-btn.copied { border-color: var(--matcha); color: var(--matcha); background: var(--matcha-pale); }
+.upcoming-sort{padding:7px 12px;display:flex;gap:5px;align-items:center;border-bottom:1px solid var(--border-light)}
+.sort-label{font-size:9px;color:var(--stone);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.sort-btn{font-size:10px;padding:2px 8px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .14s}
+.sort-btn:hover{border-color:#bbb}
+.sort-btn.active{background:var(--matcha);color:white;border-color:var(--matcha)}
 
-.pillar-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-.ptab {
-  font-size: 12px; padding: 6px 18px; border-radius: 20px;
-  border: 1px solid var(--border); background: white;
-  color: var(--stone); cursor: pointer;
-  font-family: 'Jost', sans-serif; transition: all .18s;
-}
-.ptab:hover { border-color: #bbb; }
+.upcoming-list{max-height:calc(100vh - var(--nav-h) - 260px);overflow-y:auto;padding:6px 0}
+.upcoming-item{padding:9px 15px;display:flex;gap:9px;align-items:flex-start;border-bottom:1px solid var(--border-light);transition:background .1s}
+.upcoming-item:last-child{border-bottom:none}
+.upcoming-item:hover{background:var(--cream)}
+.upcoming-date-block{flex-shrink:0;text-align:center;width:32px}
+.upcoming-day-num{font-size:17px;font-weight:500;color:var(--ink);line-height:1}
+.upcoming-day-name{font-size:9px;color:var(--stone);text-transform:uppercase;letter-spacing:.04em}
+.upcoming-month-tag{font-size:9px;color:var(--stone-light)}
+.upcoming-content{flex:1;min-width:0}
+.upcoming-pillar-row{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.upcoming-pillar-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.upcoming-pillar-label{font-size:10px;font-weight:500}
+.upcoming-platform{font-size:10px;color:var(--stone);margin-left:auto}
+.upcoming-idea{font-size:11px;color:var(--ink);line-height:1.4;margin-top:1px}
+.upcoming-del{font-size:10px;background:none;border:none;color:var(--stone-light);cursor:pointer;opacity:0;padding:0;transition:opacity .12s;flex-shrink:0;align-self:center}
+.upcoming-item:hover .upcoming-del{opacity:1}
+.upcoming-empty{padding:20px 15px;text-align:center;font-size:11px;color:var(--stone);font-style:italic}
 
-.pillar-card { background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.03); }
-.card-header { padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; }
-.card-label { font-size: 15px; font-weight: 500; }
-.card-count { font-size: 11px; opacity: .7; }
-.card-body { padding: 18px 22px; }
-.set-section { margin-bottom: 18px; }
-.set-section:last-child { margin-bottom: 0; }
-.set-title { font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--stone); margin-bottom: 9px; }
-.divider { height: 1px; background: var(--border); margin: 18px 0; }
-.copy-all-btn {
-  width: 100%; padding: 14px; border-top: 1px solid var(--border);
-  border-radius: 0; border-left: none; border-right: none; border-bottom: none;
-  background: transparent; color: var(--stone); font-size: 13px;
-  cursor: pointer; font-family: 'Jost', sans-serif; transition: all .15s; display: block;
-}
-.copy-all-btn:hover { background: var(--cream); color: var(--matcha); }
-.copy-all-btn.copied { background: var(--matcha-pale); color: var(--matcha); }
+/* HASHTAGS */
+.hash-page{max-width:860px;margin:0 auto}
+.hash-header{margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.brand-block{background:white;border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;box-shadow:0 2px 12px rgba(0,0,0,.03)}
+.brand-block-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.block-title{font-size:14px;font-weight:500;color:var(--ink)}
+.block-sub{font-size:12px;color:var(--stone);margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;padding:4px 12px;border-radius:20px;font-family:'Jost',sans-serif}
+.copy-btn{font-size:12px;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--matcha);color:var(--matcha)}
+.copy-btn.copied{border-color:var(--matcha);color:var(--matcha);background:var(--matcha-pale)}
+.pillar-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.1rem}
+.ptab{font-size:12px;padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .18s}
+.ptab:hover{border-color:#bbb}
+.pillar-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.03)}
+.card-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.card-label{font-size:15px;font-weight:500}
+.card-count{font-size:11px;opacity:.7}
+.card-body{padding:16px 20px}
+.set-section{margin-bottom:16px}
+.set-section:last-child{margin-bottom:0}
+.set-title{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--stone);margin-bottom:8px}
+.h-divider{height:1px;background:var(--border);margin:16px 0}
+.copy-all-btn{width:100%;padding:13px;border-top:1px solid var(--border);border-radius:0;border-left:none;border-right:none;border-bottom:none;background:transparent;color:var(--stone);font-size:13px;cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s;display:block}
+.copy-all-btn:hover{background:var(--cream);color:var(--matcha)}
+.copy-all-btn.copied{background:var(--matcha-pale);color:var(--matcha)}
 
-/* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(30, 28, 26, 0.45);
-  backdrop-filter: blur(4px);
-  z-index: 200;
-  display: none; align-items: center; justify-content: center;
-  padding: 1rem;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: white; border-radius: 18px;
-  width: 100%; max-width: 480px;
-  box-shadow: 0 24px 60px rgba(0,0,0,.16);
-  overflow: hidden;
-  animation: modalIn .22s ease;
-}
-@keyframes modalIn {
-  from { opacity: 0; transform: translateY(12px) scale(.97); }
-  to   { opacity: 1; transform: none; }
-}
-.modal-header {
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--ink); }
-.modal-close {
-  width: 30px; height: 30px; border-radius: 50%;
-  border: 1px solid var(--border); background: white;
-  color: var(--stone); font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .15s;
-}
-.modal-close:hover { border-color: var(--linen-dark); color: var(--linen-dark); }
-.modal-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px; }
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(30,28,26,.45);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:18px;width:100%;max-width:480px;box-shadow:0 24px 60px rgba(0,0,0,.16);overflow:hidden;animation:mIn .22s ease}
+.modal-sm{max-width:380px}
+@keyframes mIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.modal-header{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400}
+.modal-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:white;color:var(--stone);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close:hover{border-color:var(--linen-dark);color:var(--linen-dark)}
+.modal-body{padding:18px 22px 20px;display:flex;flex-direction:column;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:11px;font-weight:500;color:var(--stone);text-transform:uppercase;letter-spacing:.06em}
+.form-input,.form-textarea{font-family:'Jost',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:9px;padding:9px 12px;outline:none;transition:border-color .15s;width:100%}
+.form-input:focus,.form-textarea:focus{border-color:var(--matcha);background:white}
+.form-textarea{resize:vertical;min-height:76px;line-height:1.5}
+.pillar-picker,.platform-picker{display:flex;flex-wrap:wrap;gap:5px}
+.pillar-opt{font-size:11px;padding:4px 12px;border-radius:20px;border:1.5px solid transparent;cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s;opacity:.6}
+.pillar-opt.selected{opacity:1;border-color:currentColor}
+.platform-opt{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s}
+.platform-opt.selected{background:var(--ink);color:white;border-color:var(--ink)}
+.modal-footer{padding:0 22px 20px;display:flex;gap:10px;justify-content:flex-end}
+.btn-cancel{font-size:13px;padding:9px 20px;border-radius:20px;border:1px solid var(--border);background:white;color:var(--stone);cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s}
+.btn-cancel:hover{border-color:#bbb;color:var(--ink)}
+.btn-save{font-size:13px;padding:9px 22px;border-radius:20px;border:none;background:var(--matcha);color:white;cursor:pointer;font-family:'Jost',sans-serif;font-weight:500;transition:all .15s}
+.btn-save:hover{background:#7a8438}
+.btn-save:disabled{opacity:.4;cursor:not-allowed}
 
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-label { font-size: 11px; font-weight: 500; color: var(--stone); text-transform: uppercase; letter-spacing: .06em; }
+/* date picker */
+.date-input-wrap{position:relative}
+.date-display{font-family:'Jost',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:9px;padding:9px 12px;cursor:pointer;transition:border-color .15s;user-select:none;display:flex;align-items:center;justify-content:space-between}
+.date-display:hover,.date-display.open{border-color:var(--matcha);background:white}
+.date-picker-drop{position:absolute;top:calc(100% + 5px);left:0;right:0;background:white;border:1px solid var(--border);border-radius:12px;z-index:300;padding:11px;box-shadow:0 8px 30px rgba(0,0,0,.12);display:none}
+.date-picker-drop.open{display:block}
+.dp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.dp-month{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400}
+.dp-nav{width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:white;color:var(--stone);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.dp-nav:hover{border-color:var(--matcha);color:var(--matcha)}
+.dp-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:3px}
+.dp-dow-cell{font-size:9px;color:var(--stone);text-align:center;padding:2px 0;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dp-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11px;border-radius:5px;cursor:pointer;color:var(--ink);transition:all .1s;border:none;background:none;font-family:'Jost',sans-serif}
+.dp-day:hover{background:var(--matcha-pale)}
+.dp-day.out{color:var(--stone-light);cursor:default}
+.dp-day.out:hover{background:none}
+.dp-day.selected{background:var(--matcha);color:white;font-weight:500}
+.dp-day.today-marker{border:1px solid var(--matcha);color:var(--matcha)}
+.dp-day.today-marker.selected{color:white}
 
-.form-input, .form-select, .form-textarea {
-  font-family: 'Jost', sans-serif;
-  font-size: 13px; color: var(--ink);
-  background: var(--cream); border: 1px solid var(--border);
-  border-radius: 9px; padding: 10px 14px;
-  outline: none; transition: border-color .15s;
-  width: 100%;
-}
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--matcha); background: white; }
-.form-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-.pillar-picker { display: flex; flex-wrap: wrap; gap: 6px; }
-.pillar-opt {
-  font-size: 12px; padding: 5px 14px; border-radius: 20px;
-  border: 1.5px solid transparent; cursor: pointer;
-  font-family: 'Jost', sans-serif; transition: all .15s;
-  opacity: .6;
-}
-.pillar-opt.selected { opacity: 1; border-color: currentColor; }
-
-.platform-picker { display: flex; flex-wrap: wrap; gap: 6px; }
-.platform-opt {
-  font-size: 12px; padding: 5px 14px; border-radius: 20px;
-  border: 1px solid var(--border); background: white;
-  color: var(--stone); cursor: pointer;
-  font-family: 'Jost', sans-serif; transition: all .15s;
-}
-.platform-opt.selected { background: var(--ink); color: white; border-color: var(--ink); }
-
-.modal-footer { padding: 0 24px 22px; display: flex; gap: 10px; justify-content: flex-end; }
-.btn-cancel {
-  font-size: 13px; padding: 10px 22px; border-radius: 20px;
-  border: 1px solid var(--border); background: white; color: var(--stone);
-  cursor: pointer; font-family: 'Jost', sans-serif; transition: all .15s;
-}
-.btn-cancel:hover { border-color: #bbb; color: var(--ink); }
-.btn-save {
-  font-size: 13px; padding: 10px 24px; border-radius: 20px;
-  border: none; background: var(--matcha); color: white;
-  cursor: pointer; font-family: 'Jost', sans-serif; font-weight: 500;
-  transition: all .15s;
-}
-.btn-save:hover { background: #7a8438; }
-.btn-save:disabled { opacity: .4; cursor: not-allowed; }
-
-/* date picker styled */
-.date-input-wrap { position: relative; }
-.date-display {
-  font-family: 'Jost', sans-serif; font-size: 13px; color: var(--ink);
-  background: var(--cream); border: 1px solid var(--border);
-  border-radius: 9px; padding: 10px 14px; cursor: pointer;
-  transition: border-color .15s; user-select: none;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.date-display:hover { border-color: var(--matcha); background: white; }
-.date-display.open { border-color: var(--matcha); background: white; }
-.date-picker-drop {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-  background: white; border: 1px solid var(--border);
-  border-radius: 12px; z-index: 300; padding: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.12);
-  display: none;
-}
-.date-picker-drop.open { display: block; }
-.dp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.dp-month { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 400; color: var(--ink); }
-.dp-nav { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); background: white; color: var(--stone); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; }
-.dp-nav:hover { border-color: var(--matcha); color: var(--matcha); }
-.dp-dow { display: grid; grid-template-columns: repeat(7,1fr); margin-bottom: 4px; }
-.dp-dow-cell { font-size: 10px; color: var(--stone); text-align: center; padding: 3px 0; font-weight: 500; text-transform: uppercase; letter-spacing: .04em; }
-.dp-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
-.dp-day {
-  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-  font-size: 12px; border-radius: 6px; cursor: pointer; color: var(--ink);
-  transition: all .1s; border: none; background: none; font-family: 'Jost', sans-serif;
-}
-.dp-day:hover { background: var(--matcha-pale); }
-.dp-day.out { color: var(--stone-light); cursor: default; }
-.dp-day.out:hover { background: none; }
-.dp-day.selected { background: var(--matcha); color: white; font-weight: 500; }
-.dp-day.today-marker { border: 1px solid var(--matcha); color: var(--matcha); }
-.dp-day.today-marker.selected { color: white; }
+/* color picker */
+.color-picker{display:flex;gap:6px;flex-wrap:wrap}
+.color-opt{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .14s}
+.color-opt.selected{border-color:var(--ink);transform:scale(1.15)}
 
 /* toast */
-.toast {
-  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--ink); color: white; font-size: 13px;
-  padding: 10px 22px; border-radius: 20px;
-  opacity: 0; transition: all .25s; z-index: 500; pointer-events: none;
-  font-family: 'Jost', sans-serif;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:white;font-size:13px;padding:10px 22px;border-radius:20px;opacity:0;transition:all .25s;z-index:500;pointer-events:none;font-family:'Jost',sans-serif}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-brand"><em>@http.</em>soukiebb</div>
   <div class="nav-links">
-    <button class="nav-link active" onclick="showPage('calendar', this)">calendar</button>
-    <button class="nav-link" onclick="showPage('hashtags', this)">hashtags</button>
+    <button class="nav-link active" onclick="showPage('calendar',this)">calendar</button>
+    <button class="nav-link" onclick="showPage('hashtags',this)">hashtags</button>
   </div>
-  <button class="nav-add-btn" onclick="openModal()">+ add post</button>
+  <button class="nav-add-btn" onclick="openModal('post')">+ add post</button>
 </nav>
 
 <!-- CALENDAR PAGE -->
 <div class="page active" id="page-calendar">
-  <div class="page-header">
-    <div>
-      <div class="page-title">content <em>calendar</em></div>
-      <div class="page-sub">instagram first &nbsp;·&nbsp; 3–4 posts/week</div>
+  <div class="cal-layout">
+
+    <!-- LEFT -->
+    <div class="left-panel">
+      <div class="panel-card">
+        <div class="panel-card-header">
+          <div class="panel-card-title" id="mini-month-label"></div>
+          <div class="mini-nav">
+            <button class="mini-nav-btn" id="mini-prev">&#8592;</button>
+            <button class="mini-nav-btn" id="mini-next">&#8594;</button>
+          </div>
+        </div>
+        <div class="mini-cal-body">
+          <div class="mini-dow">
+            <div class="mini-dow-cell">S</div><div class="mini-dow-cell">M</div>
+            <div class="mini-dow-cell">T</div><div class="mini-dow-cell">W</div>
+            <div class="mini-dow-cell">T</div><div class="mini-dow-cell">F</div>
+            <div class="mini-dow-cell">S</div>
+          </div>
+          <div class="mini-grid" id="mini-grid"></div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-card-header">
+          <div class="panel-card-title">important dates</div>
+          <button class="panel-card-action" onclick="openModal('impdate')">+ add</button>
+        </div>
+        <div class="imp-dates-list" id="imp-dates-list"></div>
+      </div>
     </div>
-    <div class="cal-nav">
-      <button class="nav-btn" id="prev">&#8592;</button>
-      <div class="month-display" id="month-display"></div>
-      <button class="nav-btn" id="next">&#8594;</button>
+
+    <!-- CENTER -->
+    <div class="center-panel">
+      <div class="cal-top">
+        <div>
+          <div class="page-title">content <em>calendar</em></div>
+          <div class="page-sub">instagram first &nbsp;·&nbsp; 3–4 posts / week</div>
+        </div>
+        <div class="cal-nav">
+          <button class="nav-btn" id="prev">&#8592;</button>
+          <div class="month-display" id="month-display"></div>
+          <button class="nav-btn" id="next">&#8594;</button>
+        </div>
+      </div>
+      <div class="legend" id="cal-legend"></div>
+      <div class="cal-wrap">
+        <div class="dow-row">
+          <div class="dow">Sun</div><div class="dow">Mon</div><div class="dow">Tue</div>
+          <div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div>
+        </div>
+        <div class="month-grid" id="month-grid"></div>
+      </div>
+      <div class="cal-footer">
+        <div>click any day to add a post</div>
+        <div><span id="post-count">0</span> posts this month</div>
+      </div>
     </div>
-  </div>
-  <div class="legend" id="cal-legend"></div>
-  <div class="cal-wrap">
-    <div class="dow-row">
-      <div class="dow">Sun</div><div class="dow">Mon</div><div class="dow">Tue</div>
-      <div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div>
+
+    <!-- RIGHT -->
+    <div class="right-panel">
+      <div class="upcoming-card">
+        <div class="upcoming-header">
+          <div class="upcoming-title">upcoming posts</div>
+          <div class="upcoming-sub" id="upcoming-sub">all posts</div>
+        </div>
+        <div class="upcoming-filters" id="upcoming-filters"></div>
+        <div class="upcoming-sort">
+          <span class="sort-label">sort</span>
+          <button class="sort-btn active" onclick="setSort('date',this)">date</button>
+          <button class="sort-btn" onclick="setSort('type',this)">type</button>
+          <button class="sort-btn" onclick="setSort('platform',this)">platform</button>
+        </div>
+        <div class="upcoming-list" id="upcoming-list"></div>
+      </div>
     </div>
-    <div class="month-grid" id="month-grid"></div>
-  </div>
-  <div class="cal-footer">
-    <div>click any day to add a post there</div>
-    <div><span id="post-count">0</span> posts this month</div>
+
   </div>
 </div>
 
 <!-- HASHTAGS PAGE -->
 <div class="page" id="page-hashtags">
-  <div class="page-header">
-    <div>
+  <div class="hash-page">
+    <div class="hash-header">
       <div class="page-title">hashtag <em>sets</em></div>
-      <div class="page-sub">copy and paste ready &nbsp;·&nbsp; rotate to avoid flagging</div>
+      <div class="page-sub" style="margin-top:6px">copy and paste ready &nbsp;·&nbsp; rotate to avoid flagging</div>
     </div>
-  </div>
-  <div class="brand-block">
-    <div class="brand-block-top">
-      <div>
-        <div class="block-title">always-on brand tags</div>
-        <div class="block-sub" style="margin-top:3px">add these to every single post regardless of pillar</div>
+    <div class="brand-block">
+      <div class="brand-block-top">
+        <div>
+          <div class="block-title">always-on brand tags</div>
+          <div class="block-sub" style="margin-top:3px">add these to every single post regardless of pillar</div>
+        </div>
+        <button class="copy-btn" id="copy-brand">copy all</button>
       </div>
-      <button class="copy-btn" id="copy-brand">copy all</button>
+      <div class="tags" id="brand-tags"></div>
     </div>
-    <div class="tags" id="brand-tags"></div>
+    <div class="pillar-tabs" id="ptabs"></div>
+    <div id="pillar-card"></div>
   </div>
-  <div class="pillar-tabs" id="ptabs"></div>
-  <div id="pillar-card"></div>
 </div>
 
 <!-- ADD POST MODAL -->
-<div class="modal-overlay" id="modal-overlay">
+<div class="modal-overlay" id="modal-post">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">add a post</div>
-      <button class="modal-close" onclick="closeModal()">&#10005;</button>
+      <button class="modal-close" onclick="closeModal('post')">&#10005;</button>
     </div>
     <div class="modal-body">
-
       <div class="form-group">
         <div class="form-label">date</div>
         <div class="date-input-wrap">
-          <div class="date-display" id="date-display" onclick="toggleDatePicker()">
+          <div class="date-display" id="date-display" onclick="toggleDP('post')">
             <span id="date-display-text">select a date</span>
-            <span style="color:var(--stone-light);font-size:12px">&#9660;</span>
+            <span style="color:var(--stone-light);font-size:11px">&#9660;</span>
           </div>
           <div class="date-picker-drop" id="date-picker">
             <div class="dp-header">
@@ -434,44 +376,77 @@ nav {
               <div class="dp-month" id="dp-month-label"></div>
               <button class="dp-nav" id="dp-next">&#8594;</button>
             </div>
-            <div class="dp-dow">
-              <div class="dp-dow-cell">S</div><div class="dp-dow-cell">M</div>
-              <div class="dp-dow-cell">T</div><div class="dp-dow-cell">W</div>
-              <div class="dp-dow-cell">T</div><div class="dp-dow-cell">F</div>
-              <div class="dp-dow-cell">S</div>
-            </div>
+            <div class="dp-dow"><div class="dp-dow-cell">S</div><div class="dp-dow-cell">M</div><div class="dp-dow-cell">T</div><div class="dp-dow-cell">W</div><div class="dp-dow-cell">T</div><div class="dp-dow-cell">F</div><div class="dp-dow-cell">S</div></div>
             <div class="dp-grid" id="dp-grid"></div>
           </div>
         </div>
       </div>
-
       <div class="form-group">
         <div class="form-label">content pillar</div>
         <div class="pillar-picker" id="pillar-picker"></div>
       </div>
-
       <div class="form-group">
         <div class="form-label">platform</div>
-        <div class="platform-picker" id="platform-picker">
-          <div class="platform-opt" onclick="selectPlatform(this)">IG Feed</div>
-          <div class="platform-opt" onclick="selectPlatform(this)">IG Reels</div>
-          <div class="platform-opt" onclick="selectPlatform(this)">IG Story</div>
-          <div class="platform-opt" onclick="selectPlatform(this)">IG Carousel</div>
-          <div class="platform-opt" onclick="selectPlatform(this)">TikTok</div>
-          <div class="platform-opt" onclick="selectPlatform(this)">Substack</div>
-          <div class="platform-opt" onclick="selectPlatform(this)">IG Live</div>
+        <div class="platform-picker">
+          <div class="platform-opt" onclick="selPlat(this)">IG Feed</div>
+          <div class="platform-opt" onclick="selPlat(this)">IG Reels</div>
+          <div class="platform-opt" onclick="selPlat(this)">IG Story</div>
+          <div class="platform-opt" onclick="selPlat(this)">IG Carousel</div>
+          <div class="platform-opt" onclick="selPlat(this)">TikTok</div>
+          <div class="platform-opt" onclick="selPlat(this)">Substack</div>
+          <div class="platform-opt" onclick="selPlat(this)">IG Live</div>
         </div>
       </div>
-
       <div class="form-group">
         <div class="form-label">post idea / caption direction</div>
         <textarea class="form-textarea" id="post-idea" placeholder="describe your post idea, caption angle, or content direction..."></textarea>
       </div>
-
     </div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">cancel</button>
+      <button class="btn-cancel" onclick="closeModal('post')">cancel</button>
       <button class="btn-save" id="btn-save" onclick="savePost()">save post</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD IMPORTANT DATE MODAL -->
+<div class="modal-overlay" id="modal-impdate">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">important date</div>
+      <button class="modal-close" onclick="closeModal('impdate')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="form-label">label</div>
+        <input class="form-input" id="imp-label" placeholder="e.g. graduation, launch day, deadline">
+      </div>
+      <div class="form-group">
+        <div class="form-label">date</div>
+        <div class="date-input-wrap">
+          <div class="date-display" id="imp-date-display" onclick="toggleDP('imp')">
+            <span id="imp-date-text">select a date</span>
+            <span style="color:var(--stone-light);font-size:11px">&#9660;</span>
+          </div>
+          <div class="date-picker-drop" id="imp-dp">
+            <div class="dp-header">
+              <button class="dp-nav" id="imp-dp-prev">&#8592;</button>
+              <div class="dp-month" id="imp-dp-month"></div>
+              <button class="dp-nav" id="imp-dp-next">&#8594;</button>
+            </div>
+            <div class="dp-dow"><div class="dp-dow-cell">S</div><div class="dp-dow-cell">M</div><div class="dp-dow-cell">T</div><div class="dp-dow-cell">W</div><div class="dp-dow-cell">T</div><div class="dp-dow-cell">F</div><div class="dp-dow-cell">S</div></div>
+            <div class="dp-grid" id="imp-dp-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">color</div>
+        <div class="color-picker" id="imp-color-picker"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('impdate')">cancel</button>
+      <button class="btn-save" id="imp-btn-save" onclick="saveImpDate()">save date</button>
     </div>
   </div>
 </div>
@@ -479,410 +454,326 @@ nav {
 <div class="toast" id="toast"></div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────────
-const PILLARS = [
-  { id:'books',   label:'book review',  bg:'#8a9445', fg:'#f7f9ef', dot:'#8a9445', tagBg:'#f2f5e8', tagFg:'#3a3d10' },
-  { id:'acad',    label:'academia',     bg:'#dbe0e6', fg:'#2a3040', dot:'#7a90a8', tagBg:'#edf0f4', tagFg:'#2a3040' },
-  { id:'cafe',    label:'café culture', bg:'#e5d1d1', fg:'#4a2828', dot:'#b87878', tagBg:'#f7efef', tagFg:'#4a2828' },
-  { id:'travel',  label:'travel',       bg:'#2a5654', fg:'#e8f4f3', dot:'#2a5654', tagBg:'#e8f4f3', tagFg:'#1a3d3b' },
-  { id:'fashion', label:'fashion',      bg:'#c8b2ce', fg:'#3d1f50', dot:'#9b70b0', tagBg:'#f5eef8', tagFg:'#3d1f50' },
-  { id:'sub',     label:'substack',     bg:'#771c31', fg:'#fdf0f2', dot:'#771c31', tagBg:'#fdf0f2', tagFg:'#5a1425' },
+const PILLARS=[
+  {id:'books',  label:'book review', bg:'#8a9445',fg:'#f7f9ef',dot:'#8a9445',tagBg:'#f2f5e8',tagFg:'#3a3d10'},
+  {id:'acad',   label:'academia',    bg:'#dbe0e6',fg:'#2a3040',dot:'#7a90a8',tagBg:'#edf0f4',tagFg:'#2a3040'},
+  {id:'cafe',   label:'café',        bg:'#e5d1d1',fg:'#4a2828',dot:'#b87878',tagBg:'#f7efef',tagFg:'#4a2828'},
+  {id:'travel', label:'travel',      bg:'#2a5654',fg:'#e8f4f3',dot:'#2a5654',tagBg:'#e8f4f3',tagFg:'#1a3d3b'},
+  {id:'fashion',label:'fashion',     bg:'#c8b2ce',fg:'#3d1f50',dot:'#9b70b0',tagBg:'#f5eef8',tagFg:'#3d1f50'},
+  {id:'sub',    label:'substack',    bg:'#771c31',fg:'#fdf0f2',dot:'#771c31',tagBg:'#fdf0f2',tagFg:'#5a1425'},
 ];
-const PM = {};
-PILLARS.forEach(p => PM[p.id] = p);
-
-const BRAND_TAGS = ['#bookstagram','#booklover','#readingaesthetic','#bookish','#soukiebb','#currentlyreading','#booknerd'];
-
-const HASHTAG_SETS = {
-  books: [
-    { title:'core', tags:['#bookreview','#bookrecommendations','#whatimreading','#bookworm','#booksofinstagram','#readmorebooks'] },
-    { title:'niche', tags:['#literaryaesthetic','#shelfie','#bookstagrammer','#readingvibes','#instabooks','#bookobsessed'] },
-    { title:'tiktok', tags:['#booktok','#booktokforyou','#bookreviewtok','#readwithtok','#tiktokbooks'] },
-  ],
-  acad: [
-    { title:'core', tags:['#studygram','#studyaesthetic','#studymotivation','#studywithme','#noteaesthetic'] },
-    { title:'niche', tags:['#darkacademia','#academicaesthetic','#studyblr','#studyinspo','#collegelife','#studentlife'] },
-    { title:'tiktok', tags:['#studytok','#studywithtok','#studymotivationtok','#darkacademiatok'] },
-  ],
-  cafe: [
-    { title:'core', tags:['#cafeaesthetic','#coffeeshop','#matchalover','#cafehop','#cafevibes'] },
-    { title:'niche', tags:['#readingcafe','#bookandcoffee','#matchatime','#coffeegram','#cafehopping','#cafegram'] },
-    { title:'tiktok', tags:['#cafetok','#matchatok','#coffeeshoptok','#cafeaesthetictok'] },
-  ],
-  travel: [
-    { title:'core', tags:['#travelaesthetic','#travelgram','#wanderlust','#exploremore','#travelreads'] },
-    { title:'niche', tags:['#solotravel','#travelwithbooks','#bookishtravel','#readingabroad','#travelblogger','#placesandpages'] },
-    { title:'tiktok', tags:['#traveltok','#travelaesthetictok','#studyabroadtok','#travelvlog'] },
-  ],
-  fashion: [
-    { title:'core', tags:['#outfitinspo','#aestheticfashion','#libraryaesthetic','#readingoutfit'] },
-    { title:'niche', tags:['#darkacademiafashion','#quietluxury','#booksandstyle','#bookishfashion','#cottagecore','#oldmoneyaesthetic'] },
-    { title:'tiktok', tags:['#outfittok','#fashiontok','#darkacademiatok','#aestheticoutfit'] },
-  ],
-  sub: [
-    { title:'core', tags:['#substack','#newsletter','#substackwriter','#writingcommunity'] },
-    { title:'niche', tags:['#essayist','#bookessay','#literarywriting','#creativewriting','#readingandwriting','#substacknotes'] },
-    { title:'cross-post', tags:['#substackbookclub','#readingessay','#bookcommunity','#literaryjournal'] },
-  ],
+const PM={};PILLARS.forEach(p=>PM[p.id]=p);
+const IMP_COLORS=['#8a9445','#771c31','#2a5654','#c8b2ce','#e5d1d1','#d5c472','#99bdc1','#7a90a8'];
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAY_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS_AVAIL=[
+  {year:2026,month:4,label:'May 2026'},
+  {year:2026,month:5,label:'June 2026'},
+  {year:2026,month:6,label:'July 2026'},
+  {year:2026,month:7,label:'August 2026'},
+];
+const BRAND_TAGS=['#bookstagram','#booklover','#readingaesthetic','#bookish','#soukiebb','#currentlyreading','#booknerd'];
+const HASHTAG_SETS={
+  books:[{title:'core',tags:['#bookreview','#bookrecommendations','#whatimreading','#bookworm','#booksofinstagram','#readmorebooks']},{title:'niche',tags:['#literaryaesthetic','#shelfie','#bookstagrammer','#readingvibes','#instabooks','#bookobsessed']},{title:'tiktok',tags:['#booktok','#booktokforyou','#bookreviewtok','#readwithtok','#tiktokbooks']}],
+  acad:[{title:'core',tags:['#studygram','#studyaesthetic','#studymotivation','#studywithme','#noteaesthetic']},{title:'niche',tags:['#darkacademia','#academicaesthetic','#studyblr','#studyinspo','#collegelife','#studentlife']},{title:'tiktok',tags:['#studytok','#studywithtok','#studymotivationtok','#darkacademiatok']}],
+  cafe:[{title:'core',tags:['#cafeaesthetic','#coffeeshop','#matchalover','#cafehop','#cafevibes']},{title:'niche',tags:['#readingcafe','#bookandcoffee','#matchatime','#coffeegram','#cafehopping','#cafegram']},{title:'tiktok',tags:['#cafetok','#matchatok','#coffeeshoptok','#cafeaesthetictok']}],
+  travel:[{title:'core',tags:['#travelaesthetic','#travelgram','#wanderlust','#exploremore','#travelreads']},{title:'niche',tags:['#solotravel','#travelwithbooks','#bookishtravel','#readingabroad','#travelblogger','#placesandpages']},{title:'tiktok',tags:['#traveltok','#travelaesthetictok','#studyabroadtok','#travelvlog']}],
+  fashion:[{title:'core',tags:['#outfitinspo','#aestheticfashion','#libraryaesthetic','#readingoutfit']},{title:'niche',tags:['#darkacademiafashion','#quietluxury','#booksandstyle','#bookishfashion','#cottagecore','#oldmoneyaesthetic']},{title:'tiktok',tags:['#outfittok','#fashiontok','#darkacademiatok','#aestheticoutfit']}],
+  sub:[{title:'core',tags:['#substack','#newsletter','#substackwriter','#writingcommunity']},{title:'niche',tags:['#essayist','#bookessay','#literarywriting','#creativewriting','#readingandwriting','#substacknotes']},{title:'cross-post',tags:['#substackbookclub','#readingessay','#bookcommunity','#literaryjournal']}],
 };
 
-// starter posts stored as {year, month (0-indexed), day, pillar, platform, idea}
-let POSTS = [
-  { year:2026, month:4, day:2,  pillar:'books',   platform:'IG Reels',    idea:'film your current read — flat lay + voiceover on why you picked it up' },
-  { year:2026, month:4, day:4,  pillar:'acad',    platform:'IG Feed',     idea:'aesthetic study setup — annotated notes, matcha, soft light' },
-  { year:2026, month:4, day:6,  pillar:'cafe',    platform:'IG Story',    idea:'café you went to this week — photo dump, tag the spot' },
-  { year:2026, month:4, day:7,  pillar:'books',   platform:'TikTok',      idea:'2-min honest book review — recently finished, talk to camera' },
-  { year:2026, month:4, day:10, pillar:'fashion', platform:'IG Feed',     idea:'"what I wore to the library" — quiet bookish style outfit photo' },
-  { year:2026, month:4, day:11, pillar:'sub',     platform:'Substack',    idea:'introduce yourself — your reading tastes and what soukiebb is about' },
-  { year:2026, month:4, day:13, pillar:'books',   platform:'IG Carousel', idea:'5-slide reading recap — finished / reading / want to read next' },
-  { year:2026, month:4, day:14, pillar:'acad',    platform:'TikTok',      idea:'silent study vlog — aesthetic desk shots, notes, matcha breaks' },
-  { year:2026, month:4, day:16, pillar:'cafe',    platform:'IG Feed',     idea:'matcha of the week — photo of your order, caption the vibe' },
-  { year:2026, month:4, day:18, pillar:'books',   platform:'IG Reels',    idea:'"books that made me feel something" — top 3, moody audio' },
-  { year:2026, month:4, day:20, pillar:'travel',  platform:'IG Carousel', idea:'photo dump from a place you have been — caption what you read there' },
-  { year:2026, month:4, day:21, pillar:'sub',     platform:'Substack',    idea:'book essay — one book and what it made you think about beyond the plot' },
-  { year:2026, month:4, day:23, pillar:'acad',    platform:'IG Story',    idea:'share your TBR pile — poll: what should I read next?' },
-  { year:2026, month:4, day:25, pillar:'fashion', platform:'IG Feed',     idea:'"my reading era aesthetic" — outfit or flat lay matching a book you love' },
-  { year:2026, month:4, day:27, pillar:'books',   platform:'TikTok',      idea:'underrated book rec — one nobody talks about enough, talk to camera' },
-  { year:2026, month:4, day:28, pillar:'cafe',    platform:'IG Reels',    idea:'café hopping b-roll — two spots, soft music, no talking needed' },
+let POSTS=[
+  {year:2026,month:4,day:2, pillar:'books',  platform:'IG Reels',   idea:'film your current read — flat lay + voiceover on why you picked it up'},
+  {year:2026,month:4,day:4, pillar:'acad',   platform:'IG Feed',    idea:'aesthetic study setup — annotated notes, matcha, soft light'},
+  {year:2026,month:4,day:6, pillar:'cafe',   platform:'IG Story',   idea:'café you went to this week — photo dump, tag the spot'},
+  {year:2026,month:4,day:7, pillar:'books',  platform:'TikTok',     idea:'2-min honest book review — recently finished, talk to camera'},
+  {year:2026,month:4,day:10,pillar:'fashion',platform:'IG Feed',    idea:'"what I wore to the library" — quiet bookish style outfit photo'},
+  {year:2026,month:4,day:11,pillar:'sub',    platform:'Substack',   idea:'introduce yourself — your reading tastes and what soukiebb is about'},
+  {year:2026,month:4,day:13,pillar:'books',  platform:'IG Carousel',idea:'5-slide reading recap — finished / reading / want to read next'},
+  {year:2026,month:4,day:14,pillar:'acad',   platform:'TikTok',     idea:'silent study vlog — aesthetic desk shots, notes, matcha breaks'},
+  {year:2026,month:4,day:16,pillar:'cafe',   platform:'IG Feed',    idea:'matcha of the week — photo of your order, caption the vibe'},
+  {year:2026,month:4,day:18,pillar:'books',  platform:'IG Reels',   idea:'"books that made me feel something" — top 3, moody audio'},
+  {year:2026,month:4,day:20,pillar:'travel', platform:'IG Carousel',idea:'photo dump from a place you have been — caption what you read there'},
+  {year:2026,month:4,day:21,pillar:'sub',    platform:'Substack',   idea:'book essay — one book and what it made you think about beyond the plot'},
+  {year:2026,month:4,day:23,pillar:'acad',   platform:'IG Story',   idea:'share your TBR pile — poll: what should I read next?'},
+  {year:2026,month:4,day:25,pillar:'fashion',platform:'IG Feed',    idea:'"my reading era aesthetic" — outfit or flat lay matching a book you love'},
+  {year:2026,month:4,day:27,pillar:'books',  platform:'TikTok',     idea:'underrated book rec — one nobody talks about enough, talk to camera'},
+  {year:2026,month:4,day:28,pillar:'cafe',   platform:'IG Reels',   idea:'café hopping b-roll — two spots, soft music, no talking needed'},
+];
+let IMP_DATES=[
+  {label:'graduation',year:2026,month:4,day:16,color:'#8a9445'},
+  {label:'substack launch',year:2026,month:4,day:11,color:'#771c31'},
 ];
 
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const MONTHS_AVAILABLE = [
-  { year:2026, month:4, label:'May 2026' },
-  { year:2026, month:5, label:'June 2026' },
-  { year:2026, month:6, label:'July 2026' },
-  { year:2026, month:7, label:'August 2026' },
-];
+let curMonthIdx=0,activeFilters=new Set(PILLARS.map(p=>p.id)),activePillar='books';
+let upFilter='all',upSort='date';
+let miniYear=2026,miniMonth=4;
+let selDate=null,selPillar=null,selPlatform=null,dpY,dpM;
+let impSelDate=null,impDpY,impDpM,impSelColor=IMP_COLORS[0];
 
-let curMonthIdx = 0;
-let activeFilters = new Set(PILLARS.map(p => p.id));
-let activePillar = 'books';
+function showPage(n,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');if(btn)btn.classList.add('active');}
 
-// ── NAVIGATION ────────────────────────────────────────────────────────────────
-function showPage(name, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-}
-
-// ── CALENDAR ──────────────────────────────────────────────────────────────────
-function renderCalLegend() {
-  const el = document.getElementById('cal-legend');
-  el.innerHTML = '';
-  PILLARS.forEach(p => {
-    const pill = document.createElement('div');
-    pill.className = 'lpill' + (activeFilters.has(p.id) ? '' : ' dim');
-    pill.style.background = p.tagBg;
-    pill.style.color = p.tagFg;
-    pill.style.borderColor = p.dot + '55';
-    pill.innerHTML = `<span class="ldot" style="background:${p.dot}"></span>${p.label}`;
-    pill.onclick = () => {
-      if (activeFilters.has(p.id) && activeFilters.size === 1) return;
-      activeFilters.has(p.id) ? activeFilters.delete(p.id) : activeFilters.add(p.id);
-      renderCalLegend(); renderGrid();
-    };
+// LEGEND
+function renderLegend(){
+  const el=document.getElementById('cal-legend');el.innerHTML='';
+  PILLARS.forEach(p=>{
+    const pill=document.createElement('div');pill.className='lpill'+(activeFilters.has(p.id)?'':' dim');
+    pill.style.background=p.tagBg;pill.style.color=p.tagFg;pill.style.borderColor=p.dot+'55';
+    pill.innerHTML=`<span class="ldot" style="background:${p.dot}"></span>${p.label}`;
+    pill.onclick=()=>{if(activeFilters.has(p.id)&&activeFilters.size===1)return;activeFilters.has(p.id)?activeFilters.delete(p.id):activeFilters.add(p.id);renderLegend();renderGrid();renderUpcoming();};
     el.appendChild(pill);
   });
 }
 
-function renderGrid() {
-  const md = MONTHS_AVAILABLE[curMonthIdx];
-  document.getElementById('month-display').textContent = md.label;
-  const startDay = new Date(md.year, md.month, 1).getDay();
-  const daysInMonth = new Date(md.year, md.month + 1, 0).getDate();
-  const today = new Date();
-  const isCurrentMonth = today.getFullYear() === md.year && today.getMonth() === md.month;
-  const totalCells = Math.ceil((startDay + daysInMonth) / 7) * 7;
-
-  const grid = document.getElementById('month-grid');
-  grid.innerHTML = '';
-  let postCount = 0;
-
-  for (let i = 0; i < totalCells; i++) {
-    const dayNum = i - startDay + 1;
-    const isOut = dayNum < 1 || dayNum > daysInMonth;
-    const isToday = isCurrentMonth && dayNum === today.getDate();
-
-    const cell = document.createElement('div');
-    cell.className = 'day-cell' + (isOut ? ' out-of-month' : '') + (isToday ? ' today' : '');
-
-    const numWrap = document.createElement('div');
-    numWrap.className = 'day-num-wrap';
-    const num = document.createElement('div');
-    num.className = 'day-num';
-    num.textContent = (!isOut && dayNum > 0) ? dayNum : '';
-    numWrap.appendChild(num);
-    cell.appendChild(numWrap);
-
-    if (!isOut && dayNum > 0) {
-      cell.onclick = () => openModalForDay(md.year, md.month, dayNum);
-
-      const dayPosts = POSTS.filter(p => p.year === md.year && p.month === md.month && p.day === dayNum);
-      dayPosts.filter(p => activeFilters.has(p.pillar)).forEach((post, postIdx) => {
-        const p = PM[post.pillar];
-        const chip = document.createElement('div');
-        chip.className = 'evt';
-        chip.style.background = p.bg;
-        chip.style.color = p.fg;
-
-        const delBtn = document.createElement('button');
-        delBtn.className = 'evt-delete';
-        delBtn.textContent = '✕';
-        delBtn.title = 'delete post';
-        delBtn.onclick = (e) => {
-          e.stopPropagation();
-          const globalIdx = POSTS.findIndex(px => px.year === md.year && px.month === md.month && px.day === dayNum && px.pillar === post.pillar && px.idea === post.idea);
-          if (globalIdx > -1) { POSTS.splice(globalIdx, 1); renderGrid(); }
-        };
-
-        chip.innerHTML = `<div style="display:flex;align-items:flex-start"><span class="evt-platform">${post.platform}</span></div><span class="evt-idea">${post.idea}</span>`;
-        chip.appendChild(delBtn);
-        cell.appendChild(chip);
-        postCount++;
+// MAIN GRID
+function renderGrid(){
+  const md=MONTHS_AVAIL[curMonthIdx];
+  document.getElementById('month-display').textContent=md.label;
+  const sd=new Date(md.year,md.month,1).getDay(),dim=new Date(md.year,md.month+1,0).getDate();
+  const today=new Date(),isNow=today.getFullYear()===md.year&&today.getMonth()===md.month;
+  const total=Math.ceil((sd+dim)/7)*7,grid=document.getElementById('month-grid');
+  grid.innerHTML='';let count=0;
+  for(let i=0;i<total;i++){
+    const d=i-sd+1,isOut=d<1||d>dim,isToday=isNow&&d===today.getDate();
+    const cell=document.createElement('div');
+    cell.className='day-cell'+(isOut?' out-of-month':'')+(isToday?' today':'');
+    const nw=document.createElement('div');nw.className='day-num-wrap';
+    const nn=document.createElement('div');nn.className='day-num';nn.textContent=(!isOut&&d>0)?d:'';
+    nw.appendChild(nn);cell.appendChild(nw);
+    if(!isOut&&d>0){
+      cell.onclick=()=>openModalForDay(md.year,md.month,d);
+      IMP_DATES.filter(id=>id.year===md.year&&id.month===md.month&&id.day===d).forEach(id=>{
+        const c=document.createElement('div');c.className='imp-cal-evt';
+        c.style.background=id.color+'20';c.style.color=id.color;
+        c.innerHTML=`<span class="imp-cal-dot" style="background:${id.color}"></span>${id.label}`;
+        cell.appendChild(c);
+      });
+      POSTS.filter(p=>p.year===md.year&&p.month===md.month&&p.day===d&&activeFilters.has(p.pillar)).forEach(post=>{
+        const p=PM[post.pillar],chip=document.createElement('div');
+        chip.className='evt';chip.style.background=p.bg;chip.style.color=p.fg;
+        const del=document.createElement('button');del.className='evt-delete';del.textContent='✕';
+        del.onclick=e=>{e.stopPropagation();delPost(post);};
+        chip.innerHTML=`<span class="evt-platform">${post.platform}</span><span class="evt-idea">${post.idea}</span>`;
+        chip.appendChild(del);cell.appendChild(chip);count++;
       });
     }
     grid.appendChild(cell);
   }
-  document.getElementById('post-count').textContent = postCount;
+  document.getElementById('post-count').textContent=count;
+  renderMiniGrid();renderUpcoming();renderImpDates();
 }
+function delPost(post){const i=POSTS.findIndex(p=>p.year===post.year&&p.month===post.month&&p.day===post.day&&p.pillar===post.pillar&&p.idea===post.idea);if(i>-1){POSTS.splice(i,1);renderGrid();}}
+document.getElementById('prev').onclick=()=>{if(curMonthIdx>0){curMonthIdx--;const md=MONTHS_AVAIL[curMonthIdx];miniYear=md.year;miniMonth=md.month;renderGrid();}};
+document.getElementById('next').onclick=()=>{if(curMonthIdx<MONTHS_AVAIL.length-1){curMonthIdx++;const md=MONTHS_AVAIL[curMonthIdx];miniYear=md.year;miniMonth=md.month;renderGrid();}};
 
-document.getElementById('prev').onclick = () => { if (curMonthIdx > 0) { curMonthIdx--; renderGrid(); } };
-document.getElementById('next').onclick = () => { if (curMonthIdx < MONTHS_AVAILABLE.length - 1) { curMonthIdx++; renderGrid(); } };
-
-// ── HASHTAGS ──────────────────────────────────────────────────────────────────
-function buildBrandTags() {
-  const el = document.getElementById('brand-tags');
-  BRAND_TAGS.forEach(t => {
-    const tag = document.createElement('span');
-    tag.className = 'tag';
-    tag.style.background = '#f2f5e8';
-    tag.style.color = '#3a3d10';
-    tag.textContent = t;
-    el.appendChild(tag);
-  });
-  document.getElementById('copy-brand').onclick = function () {
-    navigator.clipboard.writeText(BRAND_TAGS.join(' '));
-    this.textContent = 'copied!';
-    this.classList.add('copied');
-    setTimeout(() => { this.textContent = 'copy all'; this.classList.remove('copied'); }, 2000);
-  };
-}
-
-function renderHashtagTabs() {
-  const el = document.getElementById('ptabs');
-  el.innerHTML = '';
-  PILLARS.forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'ptab';
-    btn.textContent = p.label;
-    if (p.id === activePillar) { btn.style.background = p.bg; btn.style.color = p.fg; btn.style.borderColor = p.bg; }
-    btn.onclick = () => { activePillar = p.id; renderHashtagTabs(); renderHashtagCard(); };
-    el.appendChild(btn);
-  });
-}
-
-function renderHashtagCard() {
-  const el = document.getElementById('pillar-card');
-  el.innerHTML = '';
-  const p = PM[activePillar];
-  const sets = HASHTAG_SETS[activePillar];
-  const allTags = [...BRAND_TAGS, ...sets.flatMap(s => s.tags)];
-
-  const card = document.createElement('div');
-  card.className = 'pillar-card';
-
-  const header = document.createElement('div');
-  header.className = 'card-header';
-  header.style.background = p.bg;
-  header.innerHTML = `<span class="card-label" style="color:${p.fg}">${p.label} hashtags</span><span class="card-count" style="color:${p.fg}">${sets.reduce((a,s)=>a+s.tags.length,0)} tags total</span>`;
-  card.appendChild(header);
-
-  const body = document.createElement('div');
-  body.className = 'card-body';
-  sets.forEach((set, idx) => {
-    const sec = document.createElement('div');
-    sec.className = 'set-section';
-    sec.innerHTML = `<div class="set-title">${set.title}</div>`;
-    const tagsDiv = document.createElement('div');
-    tagsDiv.className = 'tags';
-    set.tags.forEach(t => {
-      const tag = document.createElement('span');
-      tag.className = 'tag';
-      tag.style.background = p.tagBg;
-      tag.style.color = p.tagFg;
-      tag.textContent = t;
-      tagsDiv.appendChild(tag);
-    });
-    sec.appendChild(tagsDiv);
-    body.appendChild(sec);
-    if (idx < sets.length - 1) { const div = document.createElement('div'); div.className = 'divider'; body.appendChild(div); }
-  });
-  card.appendChild(body);
-
-  const copyAll = document.createElement('button');
-  copyAll.className = 'copy-all-btn';
-  copyAll.textContent = `copy brand tags + all ${p.label} tags`;
-  copyAll.onclick = function () {
-    navigator.clipboard.writeText(allTags.join(' '));
-    this.textContent = 'copied! paste directly into your post caption';
-    this.classList.add('copied');
-    setTimeout(() => { this.textContent = `copy brand tags + all ${p.label} tags`; this.classList.remove('copied'); }, 2500);
-  };
-  card.appendChild(copyAll);
-  el.appendChild(card);
-}
-
-// ── MODAL ─────────────────────────────────────────────────────────────────────
-let selectedDate = null;
-let selectedPillar = null;
-let selectedPlatform = null;
-let dpYear, dpMonth;
-
-function openModal() {
-  selectedDate = null; selectedPillar = null; selectedPlatform = null;
-  document.getElementById('date-display-text').textContent = 'select a date';
-  document.getElementById('date-display').classList.remove('open');
-  document.getElementById('date-picker').classList.remove('open');
-  document.getElementById('post-idea').value = '';
-  document.querySelectorAll('.pillar-opt').forEach(o => o.classList.remove('selected'));
-  document.querySelectorAll('.platform-opt').forEach(o => o.classList.remove('selected'));
-  const now = new Date();
-  dpYear = now.getFullYear(); dpMonth = now.getMonth();
-  renderDatePicker();
-  buildPillarPicker();
-  document.getElementById('modal-overlay').classList.add('open');
-  updateSaveBtn();
-}
-
-function openModalForDay(year, month, day) {
-  openModal();
-  selectedDate = { year, month, day };
-  const mn = MONTH_NAMES[month];
-  document.getElementById('date-display-text').textContent = `${mn} ${day}, ${year}`;
-  dpYear = year; dpMonth = month;
-  renderDatePicker();
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.getElementById('date-picker').classList.remove('open');
-  document.getElementById('date-display').classList.remove('open');
-}
-
-function toggleDatePicker() {
-  const dp = document.getElementById('date-picker');
-  const dd = document.getElementById('date-display');
-  const isOpen = dp.classList.contains('open');
-  dp.classList.toggle('open', !isOpen);
-  dd.classList.toggle('open', !isOpen);
-}
-
-function renderDatePicker() {
-  document.getElementById('dp-month-label').textContent = MONTH_NAMES[dpMonth] + ' ' + dpYear;
-  const startDay = new Date(dpYear, dpMonth, 1).getDay();
-  const daysInMonth = new Date(dpYear, dpMonth + 1, 0).getDate();
-  const today = new Date();
-  const totalCells = Math.ceil((startDay + daysInMonth) / 7) * 7;
-  const grid = document.getElementById('dp-grid');
-  grid.innerHTML = '';
-
-  for (let i = 0; i < totalCells; i++) {
-    const d = i - startDay + 1;
-    const btn = document.createElement('button');
-    btn.className = 'dp-day';
-    if (d < 1 || d > daysInMonth) {
-      btn.classList.add('out');
-      btn.textContent = '';
-    } else {
-      btn.textContent = d;
-      if (today.getFullYear() === dpYear && today.getMonth() === dpMonth && today.getDate() === d) btn.classList.add('today-marker');
-      if (selectedDate && selectedDate.year === dpYear && selectedDate.month === dpMonth && selectedDate.day === d) btn.classList.add('selected');
-      btn.onclick = () => {
-        selectedDate = { year: dpYear, month: dpMonth, day: d };
-        document.getElementById('date-display-text').textContent = `${MONTH_NAMES[dpMonth]} ${d}, ${dpYear}`;
-        document.getElementById('date-picker').classList.remove('open');
-        document.getElementById('date-display').classList.remove('open');
-        renderDatePicker();
-        updateSaveBtn();
-      };
+// MINI CAL
+function renderMiniGrid(){
+  document.getElementById('mini-month-label').textContent=MONTH_NAMES[miniMonth].slice(0,3)+' '+miniYear;
+  const sd=new Date(miniYear,miniMonth,1).getDay(),dim=new Date(miniYear,miniMonth+1,0).getDate();
+  const today=new Date(),isNow=today.getFullYear()===miniYear&&today.getMonth()===miniMonth;
+  const total=Math.ceil((sd+dim)/7)*7,grid=document.getElementById('mini-grid');
+  grid.innerHTML='';
+  const md=MONTHS_AVAIL[curMonthIdx];
+  for(let i=0;i<total;i++){
+    const d=i-sd+1,btn=document.createElement('button');btn.className='mini-day';
+    if(d<1||d>dim){btn.classList.add('out');btn.textContent='';}
+    else{
+      btn.textContent=d;
+      if(POSTS.some(p=>p.year===miniYear&&p.month===miniMonth&&p.day===d))btn.classList.add('has-post');
+      if(isNow&&d===today.getDate())btn.classList.add('today');
+      btn.onclick=()=>{if(miniYear===md.year&&miniMonth===md.month)openModalForDay(miniYear,miniMonth,d);};
     }
     grid.appendChild(btn);
   }
 }
+document.getElementById('mini-prev').onclick=()=>{miniMonth--;if(miniMonth<0){miniMonth=11;miniYear--;}renderMiniGrid();};
+document.getElementById('mini-next').onclick=()=>{miniMonth++;if(miniMonth>11){miniMonth=0;miniYear++;}renderMiniGrid();};
 
-document.getElementById('dp-prev').onclick = () => { dpMonth--; if (dpMonth < 0) { dpMonth = 11; dpYear--; } renderDatePicker(); };
-document.getElementById('dp-next').onclick = () => { dpMonth++; if (dpMonth > 11) { dpMonth = 0; dpYear++; } renderDatePicker(); };
-
-function buildPillarPicker() {
-  const el = document.getElementById('pillar-picker');
-  el.innerHTML = '';
-  PILLARS.forEach(p => {
-    const opt = document.createElement('div');
-    opt.className = 'pillar-opt';
-    opt.style.background = p.tagBg;
-    opt.style.color = p.tagFg;
-    opt.textContent = p.label;
-    if (selectedPillar === p.id) opt.classList.add('selected');
-    opt.onclick = () => {
-      selectedPillar = p.id;
-      document.querySelectorAll('.pillar-opt').forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      updateSaveBtn();
-    };
-    el.appendChild(opt);
+// IMP DATES
+function renderImpDates(){
+  const el=document.getElementById('imp-dates-list');el.innerHTML='';
+  const sorted=[...IMP_DATES].sort((a,b)=>new Date(a.year,a.month,a.day)-new Date(b.year,b.month,b.day));
+  if(!sorted.length){el.innerHTML='<div class="imp-empty">no important dates yet</div>';return;}
+  sorted.forEach(id=>{
+    const item=document.createElement('div');item.className='imp-date-item';
+    const dot=document.createElement('div');dot.className='imp-dot';dot.style.background=id.color;
+    const info=document.createElement('div');info.className='imp-date-info';
+    info.innerHTML=`<div class="imp-date-label">${id.label}</div><div class="imp-date-when">${MONTH_NAMES[id.month]} ${id.day}, ${id.year}</div>`;
+    const del=document.createElement('button');del.className='imp-date-del';del.textContent='✕';
+    del.onclick=()=>{const i=IMP_DATES.indexOf(id);if(i>-1){IMP_DATES.splice(i,1);renderImpDates();renderGrid();}};
+    item.appendChild(dot);item.appendChild(info);item.appendChild(del);el.appendChild(item);
   });
 }
 
-function selectPlatform(el) {
-  document.querySelectorAll('.platform-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedPlatform = el.textContent;
-  updateSaveBtn();
+// UPCOMING
+function renderUpcomingFilters(){
+  const el=document.getElementById('upcoming-filters');el.innerHTML='';
+  const allBtn=document.createElement('button');allBtn.className='uf-btn'+(upFilter==='all'?' active':'');allBtn.textContent='all';
+  allBtn.onclick=()=>{upFilter='all';renderUpcomingFilters();renderUpcoming();};el.appendChild(allBtn);
+  PILLARS.forEach(p=>{
+    const btn=document.createElement('button');btn.className='uf-btn'+(upFilter===p.id?' active':'');
+    btn.textContent=p.label;
+    if(upFilter===p.id){btn.style.background=p.bg;btn.style.color=p.fg;btn.style.borderColor=p.bg;}
+    btn.onclick=()=>{upFilter=p.id;renderUpcomingFilters();renderUpcoming();};el.appendChild(btn);
+  });
+}
+function setSort(type,btn){upSort=type;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderUpcoming();}
+function renderUpcoming(){
+  const el=document.getElementById('upcoming-list');el.innerHTML='';
+  let filtered=POSTS.filter(p=>(upFilter==='all'||p.pillar===upFilter)&&activeFilters.has(p.pillar));
+  if(upSort==='date')filtered.sort((a,b)=>new Date(a.year,a.month,a.day)-new Date(b.year,b.month,b.day));
+  else if(upSort==='type')filtered.sort((a,b)=>a.pillar.localeCompare(b.pillar)||new Date(a.year,a.month,a.day)-new Date(b.year,b.month,b.day));
+  else filtered.sort((a,b)=>a.platform.localeCompare(b.platform)||new Date(a.year,a.month,a.day)-new Date(b.year,b.month,b.day));
+  document.getElementById('upcoming-sub').textContent=filtered.length+' post'+(filtered.length!==1?'s':'');
+  if(!filtered.length){el.innerHTML='<div class="upcoming-empty">no posts match this filter</div>';return;}
+  filtered.forEach(post=>{
+    const p=PM[post.pillar],dateObj=new Date(post.year,post.month,post.day);
+    const item=document.createElement('div');item.className='upcoming-item';
+    const db=document.createElement('div');db.className='upcoming-date-block';
+    db.innerHTML=`<div class="upcoming-day-num">${post.day}</div><div class="upcoming-day-name">${DAY_NAMES[dateObj.getDay()]}</div><div class="upcoming-month-tag">${MONTH_NAMES[post.month].slice(0,3)}</div>`;
+    const ct=document.createElement('div');ct.className='upcoming-content';
+    ct.innerHTML=`<div class="upcoming-pillar-row"><span class="upcoming-pillar-dot" style="background:${p.dot}"></span><span class="upcoming-pillar-label" style="color:${p.dot}">${p.label}</span><span class="upcoming-platform">${post.platform}</span></div><div class="upcoming-idea">${post.idea}</div>`;
+    const del=document.createElement('button');del.className='upcoming-del';del.textContent='✕';del.onclick=()=>delPost(post);
+    item.appendChild(db);item.appendChild(ct);item.appendChild(del);el.appendChild(item);
+  });
 }
 
-function updateSaveBtn() {
-  const idea = document.getElementById('post-idea').value.trim();
-  document.getElementById('btn-save').disabled = !(selectedDate && selectedPillar && selectedPlatform && idea);
+// HASHTAGS
+function buildBrandTags(){
+  const el=document.getElementById('brand-tags');
+  BRAND_TAGS.forEach(t=>{const tag=document.createElement('span');tag.className='tag';tag.style.background='#f2f5e8';tag.style.color='#3a3d10';tag.textContent=t;el.appendChild(tag);});
+  document.getElementById('copy-brand').onclick=function(){navigator.clipboard.writeText(BRAND_TAGS.join(' '));this.textContent='copied!';this.classList.add('copied');setTimeout(()=>{this.textContent='copy all';this.classList.remove('copied');},2000);};
 }
-document.getElementById('post-idea').addEventListener('input', updateSaveBtn);
-
-function savePost() {
-  const idea = document.getElementById('post-idea').value.trim();
-  if (!selectedDate || !selectedPillar || !selectedPlatform || !idea) return;
-  POSTS.push({ year: selectedDate.year, month: selectedDate.month, day: selectedDate.day, pillar: selectedPillar, platform: selectedPlatform, idea });
-  closeModal();
-  renderGrid();
-  showToast('post added to your calendar');
+function renderHashtagTabs(){
+  const el=document.getElementById('ptabs');el.innerHTML='';
+  PILLARS.forEach(p=>{const btn=document.createElement('button');btn.className='ptab';btn.textContent=p.label;if(p.id===activePillar){btn.style.background=p.bg;btn.style.color=p.fg;btn.style.borderColor=p.bg;}btn.onclick=()=>{activePillar=p.id;renderHashtagTabs();renderHashtagCard();};el.appendChild(btn);});
+}
+function renderHashtagCard(){
+  const el=document.getElementById('pillar-card');el.innerHTML='';
+  const p=PM[activePillar],sets=HASHTAG_SETS[activePillar],allTags=[...BRAND_TAGS,...sets.flatMap(s=>s.tags)];
+  const card=document.createElement('div');card.className='pillar-card';
+  const hdr=document.createElement('div');hdr.className='card-header';hdr.style.background=p.bg;
+  hdr.innerHTML=`<span class="card-label" style="color:${p.fg}">${p.label} hashtags</span><span class="card-count" style="color:${p.fg}">${sets.reduce((a,s)=>a+s.tags.length,0)} tags</span>`;
+  card.appendChild(hdr);
+  const body=document.createElement('div');body.className='card-body';
+  sets.forEach((set,idx)=>{
+    const sec=document.createElement('div');sec.className='set-section';sec.innerHTML=`<div class="set-title">${set.title}</div>`;
+    const td=document.createElement('div');td.className='tags';
+    set.tags.forEach(t=>{const tag=document.createElement('span');tag.className='tag';tag.style.background=p.tagBg;tag.style.color=p.tagFg;tag.textContent=t;td.appendChild(tag);});
+    sec.appendChild(td);body.appendChild(sec);
+    if(idx<sets.length-1){const dv=document.createElement('div');dv.className='h-divider';body.appendChild(dv);}
+  });
+  card.appendChild(body);
+  const ca=document.createElement('button');ca.className='copy-all-btn';ca.textContent=`copy brand tags + all ${p.label} tags`;
+  ca.onclick=function(){navigator.clipboard.writeText(allTags.join(' '));this.textContent='copied!';this.classList.add('copied');setTimeout(()=>{this.textContent=`copy brand tags + all ${p.label} tags`;this.classList.remove('copied');},2500);};
+  card.appendChild(ca);el.appendChild(card);
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
-}
-
-// close modal on overlay click
-document.getElementById('modal-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-});
-
-// close date picker on outside click
-document.addEventListener('click', e => {
-  const wrap = document.querySelector('.date-input-wrap');
-  if (wrap && !wrap.contains(e.target)) {
-    document.getElementById('date-picker').classList.remove('open');
+// MODALS
+function openModal(type){
+  if(type==='post'){
+    selDate=null;selPillar=null;selPlatform=null;
+    document.getElementById('date-display-text').textContent='select a date';
     document.getElementById('date-display').classList.remove('open');
+    document.getElementById('date-picker').classList.remove('open');
+    document.getElementById('post-idea').value='';
+    document.querySelectorAll('.pillar-opt').forEach(o=>o.classList.remove('selected'));
+    document.querySelectorAll('.platform-opt').forEach(o=>o.classList.remove('selected'));
+    const now=new Date();dpY=now.getFullYear();dpM=now.getMonth();
+    renderDP();buildPillarPicker();
+    document.getElementById('modal-post').classList.add('open');updateSaveBtn();
+  }else{
+    impSelDate=null;impSelColor=IMP_COLORS[0];
+    document.getElementById('imp-label').value='';
+    document.getElementById('imp-date-text').textContent='select a date';
+    document.getElementById('imp-date-display').classList.remove('open');
+    document.getElementById('imp-dp').classList.remove('open');
+    const now=new Date();impDpY=now.getFullYear();impDpM=now.getMonth();
+    renderImpDP();buildColorPicker();
+    document.getElementById('modal-impdate').classList.add('open');updateImpSaveBtn();
   }
+}
+function openModalForDay(y,m,d){openModal('post');selDate={year:y,month:m,day:d};document.getElementById('date-display-text').textContent=`${MONTH_NAMES[m]} ${d}, ${y}`;dpY=y;dpM=m;renderDP();}
+function closeModal(type){
+  document.getElementById('modal-'+type).classList.remove('open');
+  if(type==='post'){document.getElementById('date-picker').classList.remove('open');document.getElementById('date-display').classList.remove('open');}
+  else{document.getElementById('imp-dp').classList.remove('open');document.getElementById('imp-date-display').classList.remove('open');}
+}
+
+function toggleDP(which){
+  if(which==='post'){const dp=document.getElementById('date-picker'),dd=document.getElementById('date-display');const o=dp.classList.contains('open');dp.classList.toggle('open',!o);dd.classList.toggle('open',!o);}
+  else{const dp=document.getElementById('imp-dp'),dd=document.getElementById('imp-date-display');const o=dp.classList.contains('open');dp.classList.toggle('open',!o);dd.classList.toggle('open',!o);}
+}
+function renderDP(){
+  document.getElementById('dp-month-label').textContent=MONTH_NAMES[dpM]+' '+dpY;
+  const sd=new Date(dpY,dpM,1).getDay(),dim=new Date(dpY,dpM+1,0).getDate(),today=new Date(),total=Math.ceil((sd+dim)/7)*7;
+  const grid=document.getElementById('dp-grid');grid.innerHTML='';
+  for(let i=0;i<total;i++){const d=i-sd+1;const btn=document.createElement('button');btn.className='dp-day';
+    if(d<1||d>dim){btn.classList.add('out');btn.textContent='';}
+    else{btn.textContent=d;if(today.getFullYear()===dpY&&today.getMonth()===dpM&&today.getDate()===d)btn.classList.add('today-marker');
+      if(selDate&&selDate.year===dpY&&selDate.month===dpM&&selDate.day===d)btn.classList.add('selected');
+      btn.onclick=()=>{selDate={year:dpY,month:dpM,day:d};document.getElementById('date-display-text').textContent=`${MONTH_NAMES[dpM]} ${d}, ${dpY}`;document.getElementById('date-picker').classList.remove('open');document.getElementById('date-display').classList.remove('open');renderDP();updateSaveBtn();};}
+    grid.appendChild(btn);}
+}
+document.getElementById('dp-prev').onclick=()=>{dpM--;if(dpM<0){dpM=11;dpY--;}renderDP();};
+document.getElementById('dp-next').onclick=()=>{dpM++;if(dpM>11){dpM=0;dpY++;}renderDP();};
+
+function renderImpDP(){
+  document.getElementById('imp-dp-month').textContent=MONTH_NAMES[impDpM]+' '+impDpY;
+  const sd=new Date(impDpY,impDpM,1).getDay(),dim=new Date(impDpY,impDpM+1,0).getDate(),today=new Date(),total=Math.ceil((sd+dim)/7)*7;
+  const grid=document.getElementById('imp-dp-grid');grid.innerHTML='';
+  for(let i=0;i<total;i++){const d=i-sd+1;const btn=document.createElement('button');btn.className='dp-day';
+    if(d<1||d>dim){btn.classList.add('out');btn.textContent='';}
+    else{btn.textContent=d;if(today.getFullYear()===impDpY&&today.getMonth()===impDpM&&today.getDate()===d)btn.classList.add('today-marker');
+      if(impSelDate&&impSelDate.year===impDpY&&impSelDate.month===impDpM&&impSelDate.day===d)btn.classList.add('selected');
+      btn.onclick=()=>{impSelDate={year:impDpY,month:impDpM,day:d};document.getElementById('imp-date-text').textContent=`${MONTH_NAMES[impDpM]} ${d}, ${impDpY}`;document.getElementById('imp-dp').classList.remove('open');document.getElementById('imp-date-display').classList.remove('open');renderImpDP();updateImpSaveBtn();};}
+    grid.appendChild(btn);}
+}
+document.getElementById('imp-dp-prev').onclick=()=>{impDpM--;if(impDpM<0){impDpM=11;impDpY--;}renderImpDP();};
+document.getElementById('imp-dp-next').onclick=()=>{impDpM++;if(impDpM>11){impDpM=0;impDpY++;}renderImpDP();};
+
+function buildPillarPicker(){
+  const el=document.getElementById('pillar-picker');el.innerHTML='';
+  PILLARS.forEach(p=>{const opt=document.createElement('div');opt.className='pillar-opt';opt.style.background=p.tagBg;opt.style.color=p.tagFg;opt.textContent=p.label;if(selPillar===p.id)opt.classList.add('selected');
+    opt.onclick=()=>{selPillar=p.id;document.querySelectorAll('.pillar-opt').forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');updateSaveBtn();};el.appendChild(opt);});
+}
+function selPlat(el){document.querySelectorAll('.platform-opt').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selPlatform=el.textContent;updateSaveBtn();}
+function updateSaveBtn(){const idea=document.getElementById('post-idea').value.trim();document.getElementById('btn-save').disabled=!(selDate&&selPillar&&selPlatform&&idea);}
+document.getElementById('post-idea').addEventListener('input',updateSaveBtn);
+function updateImpSaveBtn(){document.getElementById('imp-btn-save').disabled=!(impSelDate&&document.getElementById('imp-label').value.trim());}
+document.getElementById('imp-label').addEventListener('input',updateImpSaveBtn);
+
+function buildColorPicker(){
+  const el=document.getElementById('imp-color-picker');el.innerHTML='';
+  IMP_COLORS.forEach(c=>{const opt=document.createElement('div');opt.className='color-opt'+(c===impSelColor?' selected':'');opt.style.background=c;opt.onclick=()=>{impSelColor=c;buildColorPicker();};el.appendChild(opt);});
+}
+
+function savePost(){
+  const idea=document.getElementById('post-idea').value.trim();
+  if(!selDate||!selPillar||!selPlatform||!idea)return;
+  POSTS.push({year:selDate.year,month:selDate.month,day:selDate.day,pillar:selPillar,platform:selPlatform,idea});
+  closeModal('post');renderGrid();showToast('post added to your calendar');
+}
+function saveImpDate(){
+  const lbl=document.getElementById('imp-label').value.trim();
+  if(!impSelDate||!lbl)return;
+  IMP_DATES.push({label:lbl,year:impSelDate.year,month:impSelDate.month,day:impSelDate.day,color:impSelColor});
+  closeModal('impdate');renderImpDates();renderGrid();showToast('important date saved');
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id.replace('modal-',''));});});
+document.addEventListener('click',e=>{
+  const w1=document.querySelector('#modal-post .date-input-wrap');
+  const w2=document.querySelector('#modal-impdate .date-input-wrap');
+  if(w1&&!w1.contains(e.target)){document.getElementById('date-picker').classList.remove('open');document.getElementById('date-display').classList.remove('open');}
+  if(w2&&!w2.contains(e.target)){document.getElementById('imp-dp').classList.remove('open');document.getElementById('imp-date-display').classList.remove('open');}
 });
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-renderCalLegend();
-renderGrid();
-buildBrandTags();
-renderHashtagTabs();
-renderHashtagCard();
+// INIT
+renderLegend();renderGrid();renderUpcomingFilters();
+buildBrandTags();renderHashtagTabs();renderHashtagCard();
 </script>
 </body>
 </html>
