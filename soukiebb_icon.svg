@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 680 680">
+  <rect x="100" y="100" width="480" height="480" rx="96" fill="#faf7f2"/>
+  <path d="M462 168 C462 168 472 198 490 216 C508 234 538 244 538 244 C538 244 508 254 490 272 C472 290 462 320 462 320 C462 320 452 290 434 272 C416 254 386 244 386 244 C386 244 416 234 434 216 C452 198 462 168 462 168 Z" fill="#8a9445"/>
+  <text x="295" y="492" font-family="Georgia, 'Times New Roman', serif" font-size="290" font-style="italic" font-weight="400" fill="#8a9445" text-anchor="middle" dominant-baseline="auto">@</text>
+</svg>
